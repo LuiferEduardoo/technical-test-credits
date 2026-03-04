@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authUtils } from '../utils/auth';
 import './LoginForm.css';
 
 interface LoginFormData {
@@ -13,6 +15,7 @@ interface FormErrors {
 }
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -88,10 +91,13 @@ const LoginForm = () => {
       if (!response.ok) {
         throw new Error(data.message || 'Error al iniciar sesión');
       }
-
-      // Handle successful login
-      console.log('Login successful:', data);
-      // You can store the token, redirect, etc.
+      // Save token to cookie
+      if (data.data.token) {
+        authUtils.setToken(data.data.token);
+        navigate('/dashboard');
+      } else {
+        throw new Error('No se recibió el token de autenticación');
+      }
 
     } catch (error) {
       setErrors({
