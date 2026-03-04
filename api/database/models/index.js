@@ -1,4 +1,5 @@
 const { sequelize } = require('../connection');
+const { Sequelize } = require('sequelize');
 
 // Importar modelos
 const User = require('./User');
