@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const { testConnection, syncDatabase } = require('./database/connection');
+const authRoutes = require('./routes/authRoutes');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware para parsear JSON
 app.use(express.json());
 
-// Ruta básica de prueba
+// Rutas
 app.get('/', (req, res) => {
   res.json({ message: 'Bienvenido al servidor Express.js' });
 });
@@ -21,6 +23,12 @@ app.get('/health', (req, res) => {
     database: process.env.DB_NAME
   });
 });
+
+// Rutas de autenticación
+app.use('/api/auth', authRoutes);
+
+// Middleware de manejo de errores (debe ir después de las rutas)
+app.use(errorHandler);
 
 // Inicializar servidor y conexión a la base de datos
 const startServer = async () => {

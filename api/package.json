@@ -26,9 +26,12 @@
   },
   "homepage": "https://github.com/LuiferEduardoo/technical-test-credits#readme",
   "dependencies": {
+    "@hapi/boom": "^10.0.1",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.18.2",
     "sequelize": "^6.37.7"
   },
