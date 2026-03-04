@@ -48,6 +48,11 @@ const Credits = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Filter and sort states
+  const [filterText, setFilterText] = useState('');
+  const [sortBy, setSortBy] = useState<'date' | 'amount' | 'none'>('none');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
   useEffect(() => {
     fetchCredits();
   }, []);
@@ -74,6 +79,44 @@ const Credits = () => {
       setError(err instanceof Error ? err.message : 'Error al conectar con el servidor');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Filter and sort credits
+  const filteredAndSortedCredits = credits
+    .filter((credit) => {
+      if (!filterText) return true;
+      const searchLower = filterText.toLowerCase();
+      return (
+        credit.clientName.toLowerCase().includes(searchLower) ||
+        credit.identificationId.includes(searchLower) ||
+        credit.user.name.toLowerCase().includes(searchLower)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === 'none') return 0;
+
+      if (sortBy === 'date') {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+
+      if (sortBy === 'amount') {
+        const amountA = parseFloat(a.loanAmount);
+        const amountB = parseFloat(b.loanAmount);
+        return sortOrder === 'asc' ? amountA - amountB : amountB - amountA;
+      }
+
+      return 0;
+    });
+
+  const handleSort = (field: 'date' | 'amount') => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('desc');
     }
   };
 
@@ -234,27 +277,86 @@ const Credits = () => {
         {/* Credits Table */}
         <div className="tableCard">
           <h3 className="tableTitle">Detalle de Créditos</h3>
+
+          {/* Filter and Sort Controls */}
+          <div className="filterControls">
+            <div className="filterInput">
+              <label htmlFor="searchFilter">🔍 Buscar:</label>
+              <input
+                id="searchFilter"
+                type="text"
+                placeholder="Nombre, ID o Comercial..."
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                className="searchInput"
+              />
+            </div>
+
+            <div className="sortControls">
+              <span className="sortLabel">Ordenar por:</span>
+              <button
+                onClick={() => handleSort('date')}
+                className={`sortButton ${sortBy === 'date' ? 'active' : ''}`}
+              >
+                📅 Fecha {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </button>
+              <button
+                onClick={() => handleSort('amount')}
+                className={`sortButton ${sortBy === 'amount' ? 'active' : ''}`}
+              >
+                💰 Monto {sortBy === 'amount' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </button>
+              {sortBy !== 'none' && (
+                <button
+                  onClick={() => {
+                    setSortBy('none');
+                    setSortOrder('desc');
+                  }}
+                  className="sortButton clear"
+                >
+                  ✕ Limpiar
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="tableResultsInfo">
+            Mostrando {filteredAndSortedCredits.length} de {credits.length} créditos
+          </div>
+
           <div className="tableContainer">
             <table className="creditsTable">
               <thead>
                 <tr>
                   <th>Cliente</th>
                   <th>Identificación</th>
+                  <th>Comercial</th>
                   <th>Monto</th>
                   <th>Tasa de Interés</th>
                   <th>Plazo</th>
+                  <th>Fecha</th>
                 </tr>
               </thead>
               <tbody>
-                {credits.map((credit) => (
-                  <tr key={credit.id}>
-                    <td>{credit.clientName}</td>
-                    <td>{credit.identificationId}</td>
-                    <td>${parseFloat(credit.loanAmount).toLocaleString('es-CO')}</td>
-                    <td>{credit.interestRate}%</td>
-                    <td>{credit.termMonths} meses</td>
+                {filteredAndSortedCredits.length > 0 ? (
+                  filteredAndSortedCredits.map((credit) => (
+                    <tr key={credit.id}>
+                      <td>{credit.clientName}</td>
+                      <td>{credit.identificationId}</td>
+                      <td>{credit.user.name}</td>
+                      <td>${parseFloat(credit.loanAmount).toLocaleString('es-CO')}</td>
+                      <td>{credit.interestRate}%</td>
+                      <td>{credit.termMonths} meses</td>
+                      <td>{new Date(credit.createdAt).toLocaleDateString('es-CO')}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="noResults">
+                      No se encontraron resultados para "{filterText}"
+                    </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
