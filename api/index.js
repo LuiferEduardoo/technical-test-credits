@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { testConnection, syncDatabase } = require('./database/connection');
 const authRoutes = require('./routes/authRoutes');
 const creditRoutes = require('./routes/creditRoutes');
@@ -7,6 +8,9 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// CORS - Desactivado (permite todos los orígenes)
+app.use(cors());
 
 // Middleware para parsear JSON
 app.use(express.json());
