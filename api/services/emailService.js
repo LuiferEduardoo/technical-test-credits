@@ -7,8 +7,11 @@ const createTransporter = () => {
     port: process.env.BREVO_SMTP_PORT,
     secure: process.env.BREVO_SMTP_SECURE === 'true', // true para 465, false para otros puertos
     auth: {
-      user: process.env.BREVO_EMAIL,
+      user: process.env.BREVO_LOGIN,
       pass: process.env.BREVO_SMTP_KEY
+    },
+     tls: {
+      servername: 'smtp-relay.sendinblue.com' // ← nombre real del certificado
     }
   });
 };
