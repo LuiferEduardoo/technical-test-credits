@@ -48,8 +48,41 @@ const validateLogin = [
   handleValidationErrors
 ];
 
+// Validaciones para crear crédito
+const validateCreditCreate = [
+  body('clientName')
+    .trim()
+    .notEmpty()
+    .withMessage('El nombre del cliente es obligatorio')
+    .isLength({ min: 2, max: 150 })
+    .withMessage('El nombre del cliente debe tener entre 2 y 150 caracteres'),
+  body('identificationId')
+    .trim()
+    .notEmpty()
+    .withMessage('La identificación es obligatoria')
+    .isLength({ min: 5, max: 20 })
+    .withMessage('La identificación debe tener entre 5 y 20 caracteres'),
+  body('loanAmount')
+    .notEmpty()
+    .withMessage('El monto del crédito es obligatorio')
+    .isFloat({ min: 0.01 })
+    .withMessage('El monto del crédito debe ser mayor a 0'),
+  body('interestRate')
+    .notEmpty()
+    .withMessage('La tasa de interés es obligatoria')
+    .isFloat({ min: 0, max: 100 })
+    .withMessage('La tasa de interés debe estar entre 0 y 100'),
+  body('termMonths')
+    .notEmpty()
+    .withMessage('El plazo en meses es obligatorio')
+    .isInt({ min: 1, max: 360 })
+    .withMessage('El plazo debe estar entre 1 y 360 meses'),
+  handleValidationErrors
+];
+
 module.exports = {
   validateBody,
   validateLogin,
+  validateCreditCreate,
   handleValidationErrors,
 };

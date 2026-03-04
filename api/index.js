@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const { testConnection, syncDatabase } = require('./database/connection');
 const authRoutes = require('./routes/authRoutes');
+const creditRoutes = require('./routes/creditRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -26,6 +27,9 @@ app.get('/health', (req, res) => {
 
 // Rutas de autenticación
 app.use('/api/auth', authRoutes);
+
+// Rutas de créditos (requieren autenticación)
+app.use('/api/credits', creditRoutes);
 
 // Middleware de manejo de errores (debe ir después de las rutas)
 app.use(errorHandler);
