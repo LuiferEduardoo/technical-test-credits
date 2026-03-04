@@ -15,6 +15,7 @@ import {
   Line
 } from 'recharts';
 import { authUtils } from '../utils/auth';
+import CreateCredit from './CreateCredit';
 import './Credits.css';
 
 interface Credit {
@@ -47,6 +48,7 @@ const Credits = () => {
   const [credits, setCredits] = useState<Credit[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   // Filter and sort states
   const [filterText, setFilterText] = useState('');
@@ -120,6 +122,16 @@ const Credits = () => {
     }
   };
 
+  const handleCreditCreated = () => {
+    setShowCreateForm(false);
+    fetchCredits(); // Reload credits list
+  };
+
+  // Show create form
+  if (showCreateForm) {
+    return <CreateCredit onSuccess={handleCreditCreated} />;
+  }
+
   // Prepare data for charts
   const loanAmountsData = credits.map((credit) => ({
     name: credit.clientName.split(' ')[0],
@@ -181,6 +193,17 @@ const Credits = () => {
       <div className="creditsContent">
         <h1 className="creditsTitle">Gestión de Créditos</h1>
         <p className="creditsSubtitle">Visualización y análisis de créditos</p>
+
+        {/* Create Button */}
+        <div className="createButtonContainer">
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="createCreditButton"
+          >
+            <span className="createIcon">➕</span>
+            Nuevo Crédito
+          </button>
+        </div>
 
         {/* Summary Cards */}
         <div className="summaryCards">
