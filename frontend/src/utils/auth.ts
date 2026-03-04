@@ -26,5 +26,14 @@ export const authUtils = {
   isAuthenticated: (): boolean => {
     const token = authUtils.getToken();
     return !!token;
+  },
+
+  // Get authorization headers
+  getAuthHeaders: () => {
+    const token = authUtils.getToken();
+    return {
+      'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` })
+    };
   }
 };

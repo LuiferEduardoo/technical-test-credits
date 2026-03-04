@@ -1,0 +1,102 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.sidebarHeader {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebarTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 1.5rem 0;
+}
+
+.sidebarMenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebarMenuItem {
+  margin-bottom: 0.5rem;
+}
+
+.sidebarButton {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.sidebarButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sidebarButton.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-left-color: white;
+  font-weight: 600;
+}
+
+.sidebarIcon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebarLabel {
+  flex: 1;
+  text-align: left;
+}
+
+.sidebarFooter {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoutButtonSidebar {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.logoutButtonSidebar:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
